@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.linear_model import LinearRegression
-import ujson as json
+import json
 
 
 class LaneEval(object):
@@ -64,11 +64,11 @@ class LaneEval(object):
         gts = {l['raw_file']: l for l in json_gt}
         accuracy, fp, fn = 0., 0., 0.
         for pred in json_pred:
-            if 'raw_file' not in pred or 'lanes' not in pred or 'run_time' not in pred:
-                raise Exception('raw_file or lanes or run_time not in some predictions.')
+            if 'raw_file' not in pred or 'lanes' not in pred:
+                raise Exception('raw_file or lanes not in some predictions.')
             raw_file = pred['raw_file']
             pred_lanes = pred['lanes']
-            run_time = pred['run_time']
+            run_time = 50
             if raw_file not in gts:
                 raise Exception('Some raw_file from your predictions do not exist in the test tasks.')
             gt = gts[raw_file]
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     try:
         if len(sys.argv) != 3:
             raise Exception('Invalid input arguments')
-        print LaneEval.bench_one_submit(sys.argv[1], sys.argv[2])
+        print(LaneEval.bench_one_submit(sys.argv[1], sys.argv[2]))
     except Exception as e:
-        print e.message
-        sys.exit(e.message)
+        print(e)
+        sys.exit(e)
